@@ -11,58 +11,84 @@ $env:SOCSPASSWD="Bookio421"
 
 ---
 
-## Tutorial (`simpleJDBC`)
+# Project Structure
 
-Basic template to understand how JDBC connects to DB2.
-
-```powershell
-javac -cp ".;db2jcc4.jar" simpleJDBC.java
-java  -cp ".;db2jcc4.jar" simpleJDBC
 ```
-
----
-
-## Project (`Main`)
-
-Runs all queries and modifications against the Bookio database.
-
-```powershell
-javac -cp ".;db2jcc4.jar" DBConnection.java Queries.java Modifications.java Main.java
-java  -cp ".;db2jcc4.jar" Main
+Bookio
+├── lib
+│   └── db2jcc4.jar
+└── src
+    └── bookio
+        ├── DBConnection.java
+        ├── MainCLI.java
+        └── MainServer.java
 ```
-
-### File Overview
 
 | File | Role |
 |---|---|
-| `DBConnection.java` | DB2 driver registration and connection |
-| `Queries.java` | Q1–Q5 SELECT queries |
-| `Modifications.java` | M1–M5 updates/inserts/deletes (self-restoring) |
-| `Main.java` | Entry point — calls all queries and modifications |
+| DBConnection.java | DB2 driver registration and connection |
+| MainCLI.java | CLI interface for running queries |
+| MainServer.java | HTTP server exposing API endpoints |
+| db2jcc4.jar | DB2 JDBC driver |
 
 ---
 
-## Cleanup Before Commit
+# Compilation
 
-Remove compiled `.class` files and any logs:
+Run from the **Bookio root directory**:
 
 ```powershell
-# Windows — remove all .class files
-Remove-Item -Force *.class
+javac -cp ".;lib\db2jcc4.jar" src\bookio\*.java
+```
 
-# Also remove any leftover logs if present
+---
+
+# Run CLI
+
+```powershell
+java -cp ".;src;lib\db2jcc4.jar" bookio.MainCLI
+```
+
+---
+
+# Run HTTP Server
+
+```powershell
+java -cp ".;src;lib\db2jcc4.jar" bookio.MainServer
+```
+
+Server runs at:
+
+```
+http://localhost:8080
+```
+
+Example endpoint:
+
+```
+http://localhost:8080/api/books
+```
+
+---
+
+# Cleanup Before Commit
+
+Remove compiled `.class` files:
+
+```powershell
+Remove-Item -Force src\bookio\*.class
+```
+
+Remove logs if present:
+
+```powershell
 Remove-Item -Force *.log
 ```
 
-Or if you prefer one-liner:
+---
 
-```powershell
-Remove-Item -Force *.class, *.log
-```
-
-### Pre-commit checklist
+# Pre-commit checklist
 
 - [ ] No credentials hardcoded in any `.java` file
 - [ ] All `.class` files deleted
-- [ ] `simpleJDBC.java` credentials removed if still present
 - [ ] `.log` files removed
