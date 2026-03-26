@@ -1,5 +1,8 @@
 package bookio;
-
+/*
+# FIXME: add a 2 query optionsfor complex action, 1 taskk requires sub-menu based on db query
+at least 5 options
+*/
 import java.sql.*;
 import java.util.Scanner;
 
@@ -53,6 +56,9 @@ public class MainCLI {
                     case "9":
                         System.out.print("Enter Review ID: ");
                         int reviewId = Integer.parseInt(scanner.nextLine().trim());
+                        Queries.queryAllBooks(stmt); // show books to help user choose ISBN
+                        System.out.print("Enter ISBN: ");
+                        String isbn9 = scanner.nextLine().trim();
                         System.out.print("Enter comment: ");
                         String comment = scanner.nextLine().trim();
                         System.out.print("Enter score (1-5): ");
@@ -61,8 +67,6 @@ public class MainCLI {
                         String date = scanner.nextLine().trim();
                         System.out.print("Enter customer email: ");
                         String email = scanner.nextLine().trim();
-                        System.out.print("Enter ISBN: ");
-                        String isbn9 = scanner.nextLine().trim();
                         Modifications.addReview(stmt, reviewId, comment, score, date, email, isbn9);
                         break;
 
@@ -83,7 +87,7 @@ public class MainCLI {
             }
             scanner.close();
 
-        } catch (SQLException e) {
+        } catch (SQLException e) { // Error handling for all SQL operations
             System.out.println("SQL Error — Code: " + e.getErrorCode()
                              + "  State: " + e.getSQLState());
             System.out.println(e.getMessage());
