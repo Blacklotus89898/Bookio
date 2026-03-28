@@ -19,13 +19,15 @@ public class Main {
             Queries.queryOrderSummary(stmt);
 
             // ── Modifications ────────────────────────────────────────────────
-            Modifications.updateBookPrice(stmt, "1111111111111", 17.99);  // update 1984's price
-            Modifications.restockBook(stmt, "7777777777777", 10);          // restock IT
-            Modifications.cancelOrder(stmt, 6);                            // cancel order #6
-            Modifications.addReview(stmt, 11, "A masterpiece", 5,
-            "2026-03-01", "alice@email.com",
-            "1000000000096");                      // review for Dune
-            Modifications.deleteReview(stmt, 7);                           // delete existing review #7 (bob/IT)
+            Modifications.updateBookPrice(stmt, "1111111111111", 17.99);
+            Modifications.restockBook(stmt, "7777777777777", 10);
+            Modifications.cancelOrder(stmt, 6);
+            
+            // FIX: Changed 'stmt' to 'con' and removed manual ID and Date
+            Modifications.addReview(con, "A masterpiece", 5, 
+                                   "alice@email.com", "1000000000096");
+            
+            Modifications.deleteReview(stmt, 7);
             
         } catch (SQLException e) {
             System.out.println("SQL Error — Code: " + e.getErrorCode()
